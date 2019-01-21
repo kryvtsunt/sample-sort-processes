@@ -5,7 +5,7 @@ SRCS   := $(wildcard *.c)
 all: tools ssort
 
 ssort: $(SRCS)
-	gcc $(CFLAGS) -o ssort $(SRCS) -lm -lpthread
+	gcc $(CFLAGS) -std=gnu99 -o ssort $(SRCS) -lm -lpthread
 
 tools:
 	(cd tools && make)

@@ -1,0 +1,51 @@
+Operatig System: CentOS Linux release 7.3.1611;
+Processor model: Intel(R) Xeon(R) CPU X5650  @ 2.67GHz
+Number of cpu cores: 6;
+Amount of RAM: 49279700 kB = 49.3 GB; 
+
+Sample sort program is tested in three scenarious,
+each with a newly generated input of 50 million floats. 
+Timing measurement for each scenario is repeated three times.
+_______________________________________________________________
+ scenario   |1st run(s)|2nd run(s)|3rd run(s)|median(s)|speedup|
+===============================================================
+ 1 process  |   19.21  |   18.94  |  18.81   |   18.94 |   1   | 
+---------------------------------------------------------------
+ 4 processes|   8.48   |   9.74   |  9.46    |   9.46  |   2   |
+---------------------------------------------------------------
+ 8 processes|   5.96  |   4.99    |  4.87    |   4.99  |  3.8  |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By increasing the number of processes we significantly reduce 
+program execution time: getting speedup of 2 for 4 processes scenario,
+and 3.8 for 8 processes scenario. In ideal conditions
+(when array is splitted into equal sized subarrays), 
+the speedup is 4 for 4 processes scenario and 
+8 for 8 processes scenario. As we can see, our numbers are pretty far 
+from ideal ones. This discrepancy could be explained by 3 asspects:
+- cpu architecture 
+(we do not know how much time required for processes
+to contact each other)
+- number of cores 
+(which is less than 8)
+- (main reason) division of the array is not ideal
+(as wee peek random points to get the list of medians,
+one subarray could be significantly large than another,
+which has a great impact on the final timing: program will
+wait until the longest array is sorted; it can be said that
+timing of the program execution is same as timing of processing
+the largest subarray)  
+
+Sample sort is a good parallel sorting algorism,
+it lets cpu use more of its cores to execute program, which gives
+a significant speedup.
+Amdals' Law states that speedup is limited by the total time 
+needed for the sequential part of the program. 
+Amdahl's Law gives a formula of maximum improovement possible,
+which is 1/(1-P) where P is the proportion of the program that 
+can be made parallel. 
+Gustafson's claim is that parallel machines allow 
+computations previously imposible, enabling computations
+of very large data in fixed amount of time. In other words, 
+a parallel execution not only speeding up the execution of a code, but 
+also enables dealing with larger problems.
